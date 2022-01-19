@@ -1,0 +1,195 @@
+import requests
+import json
+import os
+import time
+import logging
+
+
+
+token= "Bearer aaf7fe67-401c-4990-b86b-914bf577decd"
+project_id= "122621"
+
+
+def send_post_request(api_url, payload, token):
+    #send post request
+    try:
+        #'OpenStack-API-Version': 'compute 2.74',
+        if token== None:
+            return requests.post(api_url, headers= {'accept': 'application/json', 'content-type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic bWFqaWQ6=='}, data=payload)
+        else:
+            return requests.post(api_url, headers= {'accept': 'application/json', 'content-type': 'application/x-www-form-urlencoded', 'Authorization': token}, data=payload)
+    except Exception as e:
+       print("request processing failure")
+       print(e)
+       
+       
+       
+       
+def send_get_request(api_url, payload, token):
+    #send post request
+    try:
+        if token== None:
+            return requests.post(api_url, headers= {'accept': 'application/json', 'content-type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic bWFqaWQ6=='}, data=payload)
+        else:
+            return requests.get(api_url, headers= {'accept': 'application/json', 'content-type': 'application/x-www-form-urlencoded', 'Authorization': token}, data=payload)
+    except Exception as e:
+       print("request processing failure")
+       print(e)
+
+
+#Authenticate with qtest
+'''	   
+payload= {
+            "grant_type": "password",
+            "username": "majid.asad@xflowresearch.com",
+            "password": "qtest123",
+        }
+		
+print("payload is")
+print(payload)
+		
+print("Qtest authenticating user")
+response= send_post_request("https://majid.qtestnet.com/oauth/token", payload)
+print("successfully authenticated") if response.ok else response.raise_for_status()
+print(response.text)
+'''
+
+
+#Get project details
+'''
+ curl -X GET "https://majid.qtestnet.com/api/v3/projects" -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -H "Authorization: Bearer  aaf7fe67-401c-4990-b86b-914bf577decd" -d "expand=userprofile&assigned=true"
+'''
+
+payload= {
+            "expand": "userprofile",
+            "assigned": "true",
+            "page": "1",
+            "pageSize": "100"
+        }
+print("**************************************************************************************************************")
+print("Qtest Getting Projects")
+response= send_get_request("https://majid.qtestnet.com/api/v3/projects", payload, token)
+#print("successfully get project list") if response.ok else response.raise_for_status()
+#print(response.text)
+
+response= response.json()
+#search for key
+for resource in (response):
+    if(resource["name"]=="openshift"):
+        print("!!!!!!!!!!!!!!!!")
+        print(resource["id"])
+        print(resource["name"])
+        print("****************")
+
+#Get Testcases
+'''
+payload= {
+            "projectId ": project_id,
+            "page": "1",
+            "size": "2",
+            "expandSteps": "false"   
+        }
+print("***********************************************************************************************************************************")
+print("Qtest Getting Testcases")
+response= send_get_request("https://majid.qtestnet.com/api/v3/projects/{}/test-cases".format(project_id), payload, token)
+#print("successfully get project list") if response.ok else response.raise_for_status()
+print(response.text)
+response= response.json()
+#search for key
+count=0
+for resource in (response):
+    count=count+1
+    print(resource["id"])
+    print("-----")
+print(count)
+'''
+
+#Get Single Testcases
+payload= {
+            "projectId ": project_id,
+            "testCaseIdOrPid": "52564648",
+        }
+print("Qtest Getting Testcase")
+response= send_get_request("https://majid.qtestnet.com/api/v3/projects/{}/test-cases/52564682".format(project_id), payload, token)
+#print("successfully get project list") if response.ok else response.raise_for_status()
+print(response.text)
+response= response.json()
+#search for key
+
+#Get Release
+'''
+ curl -X GET "https://majid.qtestnet.com/api/v3/projects/122621/releases" -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -H "Authorization: Bearer aaf7fe67-401c-4990-b86b-914bf577decd" -d "projectId=122621"
+
+'''
+release3_id= 599812
+
+
+
+
+
+#Get Single module
+payload= {
+            "projectId ": project_id,
+            "pid": "MD-5",
+        }
+print("Qtest Getting Single Module")
+response= send_get_request("https://majid.qtestnet.com/api/v3/projects/122621/modules/10819997".format(project_id), payload, token)
+#print("successfully get project list") if response.ok else response.raise_for_status()
+print(response.text)
+response= response.json()
+#search for key
+
+
+
+
+
+#Get Multiple modules
+payload= {
+            "projectId ": project_id,
+            "pid": "MD-6",
+            "parent_id": 10819996,
+        }
+print("Qtest Getting multiple Modules")
+response= send_get_request("https://majid.qtestnet.com/api/v3/projects/122621/modules?parentId=10819996".format(project_id), payload, token)
+#print("successfully get project list") if response.ok else response.raise_for_status()
+print(response.text)
+response= response.json()
+
+for resource in (response):
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    print(resource["name"])
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+#search for key
+
+
+
+
+
+#Get Release
+'''
+ curl -X GET "https://majid.qtestnet.com/api/v3/projects/122621/releases" -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -H "Authorization: Bearer aaf7fe67-401c-4990-b86b-914bf577decd" -d "projectId=122621"
+
+'''
+release3_id= 599812
+
+        
+        
+    
+
+print("creating release")
+payload= {
+            "id": "122621",
+            "name": "Release 3",
+            "order": 3,
+            "pid": "RL-3",
+            "created_date": "2022-20-18T11:40:04.863Z",
+            "last_modified_date": "2022-21-18T11:40:04.863Z",
+            "description": "This is the api  release",
+            "note": "Note of  the Release",
+        }
+#testing post request
+token= "Bearer aaf7fe67-401c-4990-b86b-914bf577decd"
+response=send_post_request("https://majid.qtestnet.com/api/v3/projects/122621/releases/", payload, token)
+print(response.text)
+response= response.json()
+print("release created")
