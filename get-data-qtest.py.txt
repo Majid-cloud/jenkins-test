@@ -6,7 +6,7 @@ import logging
 
 
 
-token= "Bearer aaf7fe67-401c-4990-b86b-914bf577decd"
+token= "Bearer <<token>>"
 project_id= "122621"
 
 
@@ -57,7 +57,7 @@ print(response.text)
 
 #Get project details
 '''
- curl -X GET "https://majid.qtestnet.com/api/v3/projects" -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -H "Authorization: Bearer  aaf7fe67-401c-4990-b86b-914bf577decd" -d "expand=userprofile&assigned=true"
+ curl -X GET "https://majid.qtestnet.com/api/v3/projects" -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -H "Authorization: Bearer  <<bearer token>>" -d "expand=userprofile&assigned=true"
 '''
 
 payload= {
@@ -118,7 +118,7 @@ response= response.json()
 
 #Get Release
 '''
- curl -X GET "https://majid.qtestnet.com/api/v3/projects/122621/releases" -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -H "Authorization: Bearer aaf7fe67-401c-4990-b86b-914bf577decd" -d "projectId=122621"
+ curl -X GET "https://majid.qtestnet.com/api/v3/projects/122621/releases" -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -H "Authorization: Bearer <<bearer token>>" -d "projectId=122621"
 
 '''
 release3_id= 599812
@@ -167,7 +167,7 @@ for resource in (response):
 
 #Get Release
 '''
- curl -X GET "https://majid.qtestnet.com/api/v3/projects/122621/releases" -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -H "Authorization: Bearer aaf7fe67-401c-4990-b86b-914bf577decd" -d "projectId=122621"
+ curl -X GET "https://majid.qtestnet.com/api/v3/projects/122621/releases" -H "accept: application/json" -H "content-type: application/x-www-form-urlencoded" -H "Authorization: Bearer <<bearer token>>" -d "projectId=122621"
 
 '''
 release3_id= 599812
